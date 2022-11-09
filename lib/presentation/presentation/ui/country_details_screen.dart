@@ -16,10 +16,13 @@ class CountryDetailsScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: AppColors.whiteColor,
         automaticallyImplyLeading: false,
-        leading: Icon(
-          Icons.arrow_back,
-          size: 30.sp,
-          color: AppColors.blackColor,
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: Icon(
+            Icons.arrow_back,
+            size: 30.sp,
+            color: AppColors.blackColor,
+          ),
         ),
         title: Text(
           'Afghanistan',
