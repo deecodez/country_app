@@ -16,4 +16,19 @@ class CountryRepo extends ICountryRepo {
   Future<List<CountryListModel>> fetchCountryList() async {
     return _countryService.fetchCountryList();
   }
+
+  @override
+  Future<List<CountryListModel>> filterByCurrency(String currency) async {
+    return _countryService.filterByCurrency(currency);
+  }
+
+  @override
+  Future<List<CountryListModel>> filterByRegion(String region) async {
+    return _countryService.filterByRegion(region);
+  }
+
+  @override
+  Future<List<CountryListModel>> filterBySubRegion(String subRegion) async {
+    return _countryService.filterBySubRegion(subRegion);
+  }
 }

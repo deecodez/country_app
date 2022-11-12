@@ -17,6 +17,7 @@ final dioProvider = Provider((ref) => Dio(BaseOptions(
     )));
 
 class CountryService {
+  // ignore: deprecated_member_use
   final Reader _read;
   CountryService(this._read) {
     _read(dioProvider).interceptors.add(ApiInterceptor());
@@ -26,6 +27,51 @@ class CountryService {
 
   Future<List<CountryListModel>> fetchCountryList() async {
     const url = 'all';
+    try {
+      final response = await _read(dioProvider).get(url);
+      // final result = response.data['result'];
+      return countryListModelFromJson(response.data);
+    } on DioError catch (e) {
+      if (e.response != null) {
+        throw e.error.message;
+      } else {
+        throw e.message;
+      }
+    }
+  }
+
+  Future<List<CountryListModel>> filterByRegion(String region) async {
+    final url = 'subregion/$region';
+    try {
+      final response = await _read(dioProvider).get(url);
+      // final result = response.data['result'];
+      return countryListModelFromJson(response.data);
+    } on DioError catch (e) {
+      if (e.response != null) {
+        throw e.error.message;
+      } else {
+        throw e.message;
+      }
+    }
+  }
+
+  Future<List<CountryListModel>> filterByCurrency(String currency) async {
+    final url = 'currency/$currency';
+    try {
+      final response = await _read(dioProvider).get(url);
+      // final result = response.data['result'];
+      return countryListModelFromJson(response.data);
+    } on DioError catch (e) {
+      if (e.response != null) {
+        throw e.error.message;
+      } else {
+        throw e.message;
+      }
+    }
+  }
+
+  Future<List<CountryListModel>> filterBySubRegion(String subRegion) async {
+    final url = 'subregion/$subRegion';
     try {
       final response = await _read(dioProvider).get(url);
       // final result = response.data['result'];

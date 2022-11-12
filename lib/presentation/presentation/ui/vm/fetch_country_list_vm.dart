@@ -3,7 +3,7 @@ import 'package:country_app/data/services/api/country/model/country_list_model.d
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final fetchCountryListVm = FutureProvider<List<CountryListModel>>((ref) async {
-  final _coutryListManager = ref.read(countryRepoProvider);
+  final _coutryListManager = ref.watch(countryRepoProvider);
 
   return await _coutryListManager.fetchCountryList();
 });

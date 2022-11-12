@@ -25,12 +25,14 @@ class CountryDetailsTextWidget extends StatelessWidget {
           ),
         ),
         SizedBox(width: 8.w),
-        Text(
-          value,
-          style: GoogleFonts.poppins(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w300,
-            color: AppColors.primaryColor,
+        Expanded(
+          child: Text(
+            value,
+            style: GoogleFonts.poppins(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w300,
+              color: AppColors.primaryColor,
+            ),
           ),
         ),
       ],
