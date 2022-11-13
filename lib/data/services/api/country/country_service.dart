@@ -41,7 +41,7 @@ class CountryService {
   }
 
   Future<List<CountryListModel>> filterByRegion(String region) async {
-    final url = 'subregion/$region';
+    final url = 'region/$region';
     try {
       final response = await _read(dioProvider).get(url);
       // final result = response.data['result'];

@@ -4,6 +4,7 @@ import 'package:country_app/presentation/component/expanded.dart';
 import 'package:country_app/presentation/presentation/components/values.dart';
 import 'package:country_app/presentation/presentation/ui/country_details_screen.dart';
 import 'package:country_app/presentation/presentation/ui/vm/fetch_country_list_vm.dart';
+import 'package:country_app/presentation/presentation/ui/vm/filter_country_vm.dart';
 import 'package:country_app/presentation/presentation/ui/widget/contient_check_box_widget.dart';
 import 'package:country_app/presentation/presentation/ui/widget/filter_widget.dart';
 import 'package:country_app/presentation/presentation/ui/widget/language_radio_button_widget.dart';
@@ -48,11 +49,20 @@ class _CountryListScreenState extends ConsumerState<CountryListScreen> {
     setState(() {});
   }
 
+  String value = "";
+  void _update(String newValue) {
+    setState(() => value = newValue);
+  }
+
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(fetchCountryListVm);
+    final filterByRegionResultVm = ref.watch(filterByRegionProvider);
     final listState = useState("");
-    final appThemeState = ref.read(appThemeStateNotifier);
+    // final regionState = useState("");
+
+    // final appThemeState = ref.read(appThemeStateNotifier);
+    bool isSelected = false;
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -190,11 +200,47 @@ class _CountryListScreenState extends ConsumerState<CountryListScreen> {
                                         ],
                                       ),
                                       collapsed: Container(),
-                                      expanded: const RegionCheckBoxWidget(),
+                                      expanded: RegionCheckBoxWidget(
+                                          isSelected: isSelected,
+                                          conteinentNameselected: _update),
                                     ),
                                   ),
                                 ),
                               ),
+                              // isSelected == true
+                              //     ?
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  FilterActionButton(
+                                    width: 104.w,
+                                    border: Border.all(
+                                      width: 1.w,
+                                      color: AppColors.primaryColor,
+                                    ),
+                                    bgColor: Colors.transparent,
+                                    textColor: AppColors.primaryColor,
+                                    text: "Reset",
+                                  ),
+                                  SizedBox(width: 40.w),
+                                  FilterActionButton(
+                                    width: 236.w,
+                                    bgColor: AppColors.orangeColor,
+                                    textColor: AppColors.whiteColor,
+                                    text: "Show Results",
+                                    onTap: () {
+                                      print(value);
+                                      ref
+                                          .read(filterByRegionProvider.notifier)
+                                          .filterByRegion(value);
+
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              ),
+                              // : SizedBox(),
                             ],
                           ),
                         ),
@@ -203,6 +249,36 @@ class _CountryListScreenState extends ConsumerState<CountryListScreen> {
                   ],
                 ),
                 SizedBox(height: 16.h),
+                //TODO: Perefect way to fetch filter by region
+                // filterByRegionResultVm.when(success: (){}, idle:() => const Center(
+                //               //TODO: add shimmer effect
+                //               child: CircularProgressIndicator(
+                //                 color: AppColors.blackColor,
+                //               ),
+                //             ),error: (e, _) => Column(
+                //               mainAxisAlignment: MainAxisAlignment.center,
+                //               children: [
+                //                 Text(
+                //                   e.toString(),
+                //                   style: const TextStyle(
+                //                     fontSize: 18.0,
+                //                     color: AppColors.blackColor,
+                //                     fontWeight: FontWeight.w500,
+                //                   ),
+                //                 ),
+                //                 TextButton.icon(
+                //                     label: const Text('Retry'),
+                //                     icon: const Icon(Icons.replay),
+                //                     onPressed: () {
+                //                       ref.refresh(fetchCountryListVm);
+                //                     }),
+                //               ],
+                //             ), loading: () => const Center(
+                //               //TODO: add shimmer effect
+                //               child: CircularProgressIndicator(
+                //                 color: AppColors.blackColor,
+                //               ),
+                //             ),),
                 listState.value.isNotEmpty
                     ? Expanded(
                         child: ListView.separated(
@@ -312,6 +388,50 @@ class _CountryListScreenState extends ConsumerState<CountryListScreen> {
                           );
                         }),
               ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class FilterActionButton extends StatelessWidget {
+  final double width;
+  final Color bgColor;
+  final BoxBorder? border;
+  final Color textColor;
+  final String text;
+  final void Function()? onTap;
+  const FilterActionButton({
+    required this.width,
+    this.border,
+    required this.bgColor,
+    required this.textColor,
+    required this.text,
+    this.onTap,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width,
+        height: 48.h,
+        decoration: BoxDecoration(
+          color: bgColor,
+          border: border,
+          borderRadius: BorderRadius.circular(4.r),
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: GoogleFonts.poppins(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+              color: textColor,
             ),
           ),
         ),

@@ -11,4 +11,5 @@ class AppColors {
   static const Color exploreTextColor = Color(0xFF001637);
   static const Color containerBoxShadowRgba = Color.fromRGBO(16, 24, 40, 0.05);
   static const Color greyColor = Color(0xFF98A2B3);
+  static const Color orangeColor = Color(0xFFFF6C00);
 }
