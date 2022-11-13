@@ -22,16 +22,11 @@ class SearchFormField extends HookConsumerWidget {
             Icons.search,
             color: AppColors.searchIconColor,
           ),
-          filled: true,
-          fillColor: AppColors.textFormFieldBgColor,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(4.r),
           ),
           hintText: 'Search Country',
-          hintStyle: GoogleFonts.poppins(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w400,
-          ),
+          hintStyle: Theme.of(context).textTheme.bodyText1,
           enabledBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: AppColors.textFormFieldBgColor),
             borderRadius: BorderRadius.circular(4.r),

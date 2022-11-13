@@ -1,7 +1,5 @@
 import 'package:country_app/presentation/presentation/components/values.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class LanguageRadioButtonWidget extends StatefulWidget {
   const LanguageRadioButtonWidget({Key? key}) : super(key: key);
@@ -35,11 +33,7 @@ class _LanguageRadioButtonWidgetState extends State<LanguageRadioButtonWidget> {
                 contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                 title: Text(
                   data.name,
-                  style: GoogleFonts.poppins(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.searchIconColor,
-                  ),
+                  style: Theme.of(context).textTheme.bodyText2,
                 ),
                 groupValue: indexSelected,
                 value: data.index,

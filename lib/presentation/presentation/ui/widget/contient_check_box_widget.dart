@@ -1,11 +1,9 @@
 import 'package:country_app/presentation/presentation/components/values.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 
+// ignore: must_be_immutable
 class RegionCheckBoxWidget extends StatefulWidget {
   bool isSelected;
-  // String conteinentNameselected;
   final ValueChanged<String> conteinentNameselected;
   RegionCheckBoxWidget(
       {required this.isSelected,
@@ -46,23 +44,16 @@ class _RegionCheckBoxWidgetState extends State<RegionCheckBoxWidget> {
                 contentPadding: const EdgeInsets.symmetric(horizontal: 0),
                 title: Text(
                   data.name,
-                  style: GoogleFonts.poppins(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.searchIconColor,
-                  ),
+                  style: Theme.of(context).textTheme.bodyText2,
                 ),
                 groupValue: indexSelected,
                 value: data.index,
                 onChanged: (val) {
-                  print(val);
                   widget.conteinentNameselected(data.name);
                   setState(() {
-                    // widget.conteinentNameselected = data.name;
                     indexSelected = data.index;
                     widget.isSelected = true;
                   });
-                  print(widget.conteinentNameselected);
                 },
               ))
           .toList(),

@@ -12,7 +12,7 @@ To run any Android application built with Flutter you need to configure the envi
 1. The app run from main.dart
 2. Consist of two Screens
 3. Country List Screen: Consist of all countries return from the api
-3. Country Details Screen: Display all details of country when tap
+3. Country Details Screen: Display all details of country when tapped
 
 <!-- Libarary Used -->
 ## Library Use
@@ -21,7 +21,8 @@ To run any Android application built with Flutter you need to configure the envi
 2. <a href="https://pub.dev/packages/flutter_screenutil">flutter_screenutil:</a>  To make the app responsive.
 3. <a href="https://pub.dev/packages/font_awesome_flutter">font_awesome_flutter:</a>  Installed to use some external font.
 4. <a href="https://pub.dev/packages/dio">dio:</a>  A powerful Http client for Dart, which supports Interceptors, Global configuration, FormData, Request Cancellation, File downloading, Timeout etc.
-
+5. <a href="https://pub.dev/packages/hooks_riverpod">Riverpod:</a>  State Manageent
+ 
 <!-- Upcoming feature -->
 ## Upcoming feature
 - To filter by currency
@@ -32,10 +33,10 @@ To run any Android application built with Flutter you need to configure the envi
 None
 
 <!-- Appetize Link -->
-<!-- ## Appetize Link
-Click <a href="https://appetize.io/app/ns5zbag53gjrlw3rvw7ycznwz4">here</a> -->
+## Appetize Link
+Click <a href="https://appetize.io/app/3j64mwy4y2hv4dm3uuby6e4pfu">here</a>
 
 
 <!-- Apk Download Link -->
-<!-- ## Apk Download Link
-Download <a href="https://drive.google.com/file/d/1GbNsQB5TR3QTlhnGQZ2QX4H3EzOSOUdk/view?usp=sharing">here</a> -->
+## Apk Download Link
+Download <a href="https://drive.google.com/file/d/153tKoE1dIjgI4LGuKsKRmMnU2Ybe37r8/view?usp=sharing">here</a>

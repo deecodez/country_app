@@ -1,7 +1,6 @@
 import 'package:country_app/presentation/presentation/components/values.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class FilterWidget extends StatelessWidget {
   final double containerWidth;
@@ -48,14 +47,11 @@ class FilterWidget extends StatelessWidget {
               children: [
                 Icon(icon, color: AppColors.primaryColor),
                 SizedBox(width: 10.w),
-                Text(
-                  text,
-                  style: GoogleFonts.poppins(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.blackColor,
-                  ),
-                ),
+                Text(text,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(color: AppColors.blackColor)),
               ],
             ),
           ),

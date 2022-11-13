@@ -1,11 +1,12 @@
 import 'package:country_app/data/services/api/country/model/country_list_model.dart';
 import 'package:country_app/data/services/theme_provider.dart';
-import 'package:country_app/presentation/component/expanded.dart';
 import 'package:country_app/presentation/presentation/components/values.dart';
 import 'package:country_app/presentation/presentation/ui/country_details_screen.dart';
 import 'package:country_app/presentation/presentation/ui/vm/fetch_country_list_vm.dart';
-import 'package:country_app/presentation/presentation/ui/vm/filter_country_vm.dart';
-import 'package:country_app/presentation/presentation/ui/widget/contient_check_box_widget.dart';
+import 'package:country_app/presentation/presentation/ui/widget/bottom_sheet_close_widget.dart';
+import 'package:country_app/presentation/presentation/ui/widget/country_build_name_widget.dart';
+import 'package:country_app/presentation/presentation/ui/widget/expanded_text_widget.dart';
+import 'package:country_app/presentation/presentation/ui/widget/filter_action_button.dart';
 import 'package:country_app/presentation/presentation/ui/widget/filter_widget.dart';
 import 'package:country_app/presentation/presentation/ui/widget/language_radio_button_widget.dart';
 import 'package:country_app/presentation/presentation/ui/widget/search_form_field.dart';
@@ -13,11 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'dart:math' as math;
 
 class CountryListScreen extends StatefulHookConsumerWidget {
   const CountryListScreen({Key? key}) : super(key: key);
@@ -49,27 +47,18 @@ class _CountryListScreenState extends ConsumerState<CountryListScreen> {
     setState(() {});
   }
 
-  String value = "";
-  void _update(String newValue) {
-    setState(() => value = newValue);
-  }
-
   @override
   Widget build(BuildContext context) {
     final vm = ref.watch(fetchCountryListVm);
-    final filterByRegionResultVm = ref.watch(filterByRegionProvider);
+    final toggleDarkMode = ref.watch(darkModeProvider);
     final listState = useState("");
-    // final regionState = useState("");
 
-    // final appThemeState = ref.read(appThemeStateNotifier);
-    bool isSelected = false;
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: SafeArea(
         child: Scaffold(
-          // backgroundColor: AppColors.whiteColor,
           body: Padding(
             padding: EdgeInsets.only(left: 24.w, right: 24.w, top: 40.h),
             child: Column(
@@ -78,17 +67,18 @@ class _CountryListScreenState extends ConsumerState<CountryListScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Explore',
-                        style: GoogleFonts.pacifico(
-                          fontSize: 30.sp,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.exploreTextColor,
-                        )),
+                    Text(
+                      'Explore',
+                      style: Theme.of(context).textTheme.headline1,
+                    ),
                     GestureDetector(
-                        onTap: () {
-                          ref.read(darkModeProvider.notifier).toggle();
-                        },
-                        child: const Icon(FontAwesomeIcons.lightbulb)),
+                      onTap: () {
+                        ref.read(darkModeProvider.notifier).toggle();
+                      },
+                      child: toggleDarkMode
+                          ? const Icon(FontAwesomeIcons.moon)
+                          : const Icon(FontAwesomeIcons.sun),
+                    ),
                   ],
                 ),
                 SizedBox(height: 24.h),
@@ -155,64 +145,13 @@ class _CountryListScreenState extends ConsumerState<CountryListScreen> {
                                 text: "Filter",
                               ),
                               SizedBox(height: 24.h),
-                              ExpandableTheme(
-                                data: const ExpandableThemeData(
-                                  iconColor: Colors.blue,
-                                  useInkWell: true,
-                                ),
-                                child: ExpandableNotifier(
-                                  child: ScrollOnExpand(
-                                    child: ExpandablePanel(
-                                      theme: const ExpandableThemeData(
-                                        headerAlignment:
-                                            ExpandablePanelHeaderAlignment
-                                                .center,
-                                        tapBodyToExpand: true,
-                                        tapBodyToCollapse: true,
-                                        hasIcon: false,
-                                      ),
-                                      header: Row(
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              "Region",
-                                              style: GoogleFonts.poppins(
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.w700,
-                                                color: AppColors.primaryColor,
-                                              ),
-                                            ),
-                                          ),
-                                          const ExpandableIcon(
-                                            theme: ExpandableThemeData(
-                                              expandIcon:
-                                                  Icons.expand_more_outlined,
-                                              collapseIcon:
-                                                  Icons.expand_less_outlined,
-                                              iconColor: AppColors.primaryColor,
-                                              iconSize: 28.0,
-                                              iconRotationAngle: math.pi / 2,
-                                              iconPadding:
-                                                  EdgeInsets.only(right: 5),
-                                              hasIcon: false,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      collapsed: Container(),
-                                      expanded: RegionCheckBoxWidget(
-                                          isSelected: isSelected,
-                                          conteinentNameselected: _update),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              // isSelected == true
-                              //     ?
+                              const ExpandedTextWidget(),
+
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
+                                  //TODO: To find a way implementing the reset
                                   FilterActionButton(
                                     width: 104.w,
                                     border: Border.all(
@@ -222,19 +161,18 @@ class _CountryListScreenState extends ConsumerState<CountryListScreen> {
                                     bgColor: Colors.transparent,
                                     textColor: AppColors.primaryColor,
                                     text: "Reset",
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                    },
                                   ),
                                   SizedBox(width: 40.w),
+                                  //TODO: To find a way implementing the filter by region functionality
                                   FilterActionButton(
                                     width: 236.w,
                                     bgColor: AppColors.orangeColor,
                                     textColor: AppColors.whiteColor,
                                     text: "Show Results",
                                     onTap: () {
-                                      print(value);
-                                      ref
-                                          .read(filterByRegionProvider.notifier)
-                                          .filterByRegion(value);
-
                                       Navigator.of(context).pop();
                                     },
                                   ),
@@ -249,36 +187,7 @@ class _CountryListScreenState extends ConsumerState<CountryListScreen> {
                   ],
                 ),
                 SizedBox(height: 16.h),
-                //TODO: Perefect way to fetch filter by region
-                // filterByRegionResultVm.when(success: (){}, idle:() => const Center(
-                //               //TODO: add shimmer effect
-                //               child: CircularProgressIndicator(
-                //                 color: AppColors.blackColor,
-                //               ),
-                //             ),error: (e, _) => Column(
-                //               mainAxisAlignment: MainAxisAlignment.center,
-                //               children: [
-                //                 Text(
-                //                   e.toString(),
-                //                   style: const TextStyle(
-                //                     fontSize: 18.0,
-                //                     color: AppColors.blackColor,
-                //                     fontWeight: FontWeight.w500,
-                //                   ),
-                //                 ),
-                //                 TextButton.icon(
-                //                     label: const Text('Retry'),
-                //                     icon: const Icon(Icons.replay),
-                //                     onPressed: () {
-                //                       ref.refresh(fetchCountryListVm);
-                //                     }),
-                //               ],
-                //             ), loading: () => const Center(
-                //               //TODO: add shimmer effect
-                //               child: CircularProgressIndicator(
-                //                 color: AppColors.blackColor,
-                //               ),
-                //             ),),
+                //TODO: To use shimmer or skeleton effect for loading state
                 listState.value.isNotEmpty
                     ? Expanded(
                         child: ListView.separated(
@@ -320,11 +229,7 @@ class _CountryListScreenState extends ConsumerState<CountryListScreen> {
                               children: [
                                 Text(
                                   e.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 18.0,
-                                    color: AppColors.blackColor,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                  style: Theme.of(context).textTheme.headline3,
                                 ),
                                 TextButton.icon(
                                     label: const Text('Retry'),
@@ -339,13 +244,11 @@ class _CountryListScreenState extends ConsumerState<CountryListScreen> {
                             countries = data;
                           });
                           if (data.isEmpty) {
-                            return const Text('No data found',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: AppColors.blackColor,
-                                  fontWeight: FontWeight.w500,
-                                ));
+                            return Text(
+                              'No data found',
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.headline3,
+                            );
                           }
                           //TODO: To add spacing at the end of each country
                           return Expanded(
@@ -356,11 +259,7 @@ class _CountryListScreenState extends ConsumerState<CountryListScreen> {
                               groupHeaderBuilder: (CountryListModel? value) =>
                                   Text(
                                 value!.name!.common![0],
-                                style: GoogleFonts.poppins(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.searchIconColor,
-                                ),
+                                style: Theme.of(context).textTheme.bodyText2,
                               ),
                               itemBuilder: (BuildContext context,
                                       CountryListModel country) =>
@@ -391,149 +290,6 @@ class _CountryListScreenState extends ConsumerState<CountryListScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class FilterActionButton extends StatelessWidget {
-  final double width;
-  final Color bgColor;
-  final BoxBorder? border;
-  final Color textColor;
-  final String text;
-  final void Function()? onTap;
-  const FilterActionButton({
-    required this.width,
-    this.border,
-    required this.bgColor,
-    required this.textColor,
-    required this.text,
-    this.onTap,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: width,
-        height: 48.h,
-        decoration: BoxDecoration(
-          color: bgColor,
-          border: border,
-          borderRadius: BorderRadius.circular(4.r),
-        ),
-        child: Center(
-          child: Text(
-            text,
-            style: GoogleFonts.poppins(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w400,
-              color: textColor,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class BottomSheetCloseWidget extends StatelessWidget {
-  final String text;
-  const BottomSheetCloseWidget({
-    required this.text,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          text,
-          style: GoogleFonts.poppins(
-            fontSize: 20.sp,
-            fontWeight: FontWeight.w700,
-            color: AppColors.primaryColor,
-          ),
-        ),
-        GestureDetector(
-          onTap: () => Navigator.of(context).pop(),
-          child: Container(
-            width: 24.w,
-            height: 24.h,
-            decoration: BoxDecoration(
-              color: AppColors.greyColor.withOpacity(0.4),
-            ),
-            child: Icon(Icons.close, color: AppColors.greyColor, size: 18.sp),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class CountryBuildNameWidget extends StatelessWidget {
-  final String countryName;
-  final String capital;
-  final String imgUrl;
-  final Function()? onTap;
-  const CountryBuildNameWidget({
-    Key? key,
-    required this.countryName,
-    required this.capital,
-    required this.imgUrl,
-    required this.onTap,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Row(
-        children: [
-          SizedBox(
-            width: 40.w,
-            height: 40.h,
-            child: FittedBox(
-              child:
-
-                  // Image.network(imgUrl)
-                  CachedNetworkImage(
-                imageUrl: imgUrl,
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    CircularProgressIndicator(value: downloadProgress.progress),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
-            ),
-          ),
-          SizedBox(width: 16.w),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                countryName,
-                style: GoogleFonts.poppins(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.primaryColor,
-                ),
-              ),
-              SizedBox(height: 2.h),
-              Text(
-                capital,
-                style: GoogleFonts.poppins(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.searchIconColor,
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }
