@@ -33,9 +33,12 @@ jobs:
         uses: adityak74/google-drive-upload-git-action@v0.3
         id: folderId
         with:
-          cond: $({ steps.branch.outputs.branch == 'main'})
-          if_true: ${{ secrets.G_DRIVE}} 
-          if_false: ${{ secrets.G_DRIVE}} 
+          credentials: ${{ secrets.credentials }}
+          filename: "archive.zip"
+          folderId: ${{ secrets.folderId }}
+          # cond: $({ steps.branch.outputs.branch == 'main'})
+          # if_true: ${{ secrets.G_DRIVE}} 
+          # if_false: ${{ secrets.G_DRIVE}} 
       - run: flutter pub get
       - run: flutter build apk
   
