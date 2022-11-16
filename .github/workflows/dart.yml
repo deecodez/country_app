@@ -29,15 +29,15 @@ jobs:
       - name: Get Today Date
         id: date
         run: echo "::set-output name=date::$(date + '%Y-%m-%d')"
-      - name: Upload to gdrive
-        uses: adityak74/google-drive-upload-git-action@main
+      - name: Get Folder Id by condition
+        uses: adityak74/google-drive-upload-git-action@v0.3
         id: folderId
         with:
-          cond: $({steps.branch.outputs.branch == 'main'})
+          cond: $({ steps.branch.outputs.branch == 'main'})
           if_true: ${{ secrets.G_DRIVE}} 
           if_false: ${{ secrets.G_DRIVE}} 
-        -run: flutter pub get
-        -run: flutter build apk
+      - run: flutter pub get
+      - run: flutter build apk
   
 
 
