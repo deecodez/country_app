@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v1
-        with:
+        with: 
           java-version: 12.x
       - uses: subosito/flutter-action@v1
         with:
@@ -26,6 +26,9 @@ jobs:
       - name: Get Branch Name
         id: branch
         run: echo "::set-output name=branch::${GITHUB_REF##*/}"
+      - name: Get Today Date
+        id: date
+        run: echo "::set-output name=date::${date + %Y-%m-%d}"
 
       # Note: This workflow uses the latest stable version of the Dart SDK.
       # You can specify other versions if desired, see documentation here:
