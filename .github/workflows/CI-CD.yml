@@ -12,11 +12,11 @@ jobs:
     name: build_upload_notify
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-java@v2
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
         with: 
-          java-verion: "12.x"
-        - uses: subosito/flutter-action@v2
+          java-verion: 12.x
+        - uses: subosito/flutter-action@v1
           with:  
         channel: 'stable'
       - name: Get Branch Name
