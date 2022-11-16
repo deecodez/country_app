@@ -28,7 +28,7 @@ jobs:
         run: echo "::set-output name=branch::${GITHUB_REF##*/}"
       - name: Get Today Date
         id: date
-        run: echo "::set-output name=date::${date + %Y-%m-%d}"
+        run: echo "::set-output name=date::${date + '%Y-%m-%d'}"
 
       # Note: This workflow uses the latest stable version of the Dart SDK.
       # You can specify other versions if desired, see documentation here:
