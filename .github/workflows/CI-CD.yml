@@ -1,4 +1,4 @@
-name: build_upload_notify
+name: country_app
 
 on:
   push:
@@ -8,8 +8,8 @@ on:
 
 
 jobs:
-  build_upload_notify:
-    name: build_upload_notify
+  country_app:
+    name: country_app
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
