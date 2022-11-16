@@ -6,11 +6,12 @@ on:
       - master
       
 
+
 jobs:
   build_upload_notify:
     name: build_upload_notify
     runs-on: windows-latest
-    steps
+    steps:
       - uses: actions/checkout@v1
       - uses: action/setup- java@v1
         with: java-verion: '12.x'
