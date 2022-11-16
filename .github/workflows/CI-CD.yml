@@ -3,7 +3,7 @@ name: build_upload_notify
 on:
   push:
     branches:
-      - master
+      - main
       
 
 
