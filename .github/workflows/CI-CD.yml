@@ -14,8 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: action/setup- java@v1
-        with: java-verion: '12.x'
-          channel: 'stable'
+        with: 
+          java-verion: '12.x'
+        - uses: actions/action@v1
+          with:  
+        channel: 'stable'
       - name: Get Branch Name
         id: branch
         run: echo "::set-output name-branch::${GITHUB_REF##*/}"
